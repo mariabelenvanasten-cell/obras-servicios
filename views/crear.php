@@ -1,57 +1,151 @@
-<?php
-
-session_start();
-
-require_once __DIR__ . '/../models/Orden.php';
-
-if($_POST){
-
-    Orden::create($_POST);
-
-    header("Location: dashboard.php");
-    exit;
-}
-?>
-
 <!DOCTYPE html>
-<html>
+<html lang="es">
+
 <head>
+
+<meta charset="UTF-8">
 
 <title>Nueva Orden</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+
+body{
+
+    background:#1f1f1f;
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    height:100vh;
+}
+
+.container{
+
+    width:650px;
+
+    background:#2e2e2e;
+
+    padding:40px;
+
+    border-radius:20px;
+
+    border-top:6px solid #f5c542;
+}
+
+h1{
+
+    text-align:center;
+
+    color:#f5c542;
+
+    margin-bottom:30px;
+}
+
+textarea,
+input{
+
+    width:100%;
+
+    padding:14px;
+
+    margin-bottom:18px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#444;
+
+    color:white;
+
+    font-size:15px;
+}
+
+textarea{
+
+    resize:none;
+
+    height:130px;
+}
+
+button{
+
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#f5c542;
+
+    color:#222;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:0.3s;
+}
+
+button:hover{
+
+    background:#ffd95e;
+
+    transform:translateY(-2px);
+}
+
+</style>
 
 </head>
 
-<body class="bg-light">
+<body>
 
-<div class="container mt-5">
+<div class="container">
 
-<div class="card p-4 shadow">
+<h1>📝 Nueva Orden</h1>
 
-<div class="text-center">
+<form action="../controllers/OrdenController.php" method="POST">
 
-<img src="../assets/logo.png" width="100">
+<textarea
+name="descripcion"
+placeholder="Descripción del trabajo"></textarea>
 
-<h3>Nueva Orden</h3>
+<input
+type="text"
+name="empresa"
+placeholder="Empresa">
 
-</div>
+<input
+type="text"
+name="area"
+placeholder="Área">
 
-<form method="POST">
+<input
+type="text"
+name="ciudad"
+placeholder="Ciudad">
 
-<textarea name="descripcion" class="form-control mt-2" placeholder="Descripción"></textarea>
-
-<input name="empresa" class="form-control mt-2" placeholder="Empresa">
-
-<input name="area" class="form-control mt-2" placeholder="Área">
-
-<input name="ciudad" class="form-control mt-2" placeholder="Ciudad">
-
-<button class="btn btn-dark w-100 mt-3">Guardar</button>
+<button type="submit">
+Crear Orden
+</button>
 
 </form>
-
-</div>
 
 </div>
 

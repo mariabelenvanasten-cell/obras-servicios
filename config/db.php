@@ -1,28 +1,20 @@
 <?php
 
-class DB {
+$host = "localhost";
+$dbname = "obras_servicios";
+$user = "root";
+$pass = "";
 
-    public static function connect() {
+try {
 
-        try {
+    $pdo = new PDO(
+        "mysql:host=$host;dbname=$dbname;charset=utf8",
+        $user,
+        $pass
+    );
 
-            $pdo = new PDO(
-                "mysql:host=localhost;dbname=obras_servicios;charset=utf8",
-                "root",
-                ""
-            );
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-            return $pdo;
-
-        } catch(PDOException $e){
-
-            die("ERROR BD: " . $e->getMessage());
-
-        }
-
-    }
-
+} catch (Exception $e) {
+    die("Error conexión: " . $e->getMessage());
 }
-?>

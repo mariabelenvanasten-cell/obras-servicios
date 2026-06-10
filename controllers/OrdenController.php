@@ -1,32 +1,33 @@
 <?php
+
 require_once __DIR__ . "/../config/db.php";
 require_once __DIR__ . "/../models/Orden.php";
 
-class OrdenController {
+$model = new Orden($pdo);
 
-    private $model;
+/* CREAR ORDEN */
+if($_SERVER["REQUEST_METHOD"] == "POST"){
 
-    public function __construct($pdo) {
-        $this->model = new Orden($pdo);
-    }
+    $model->create($_POST);
 
-    public function listar() {
-        return $this->model->getAll();
-    }
-
-    public function crear($titulo, $descripcion) {
-        if (empty($titulo) || empty($descripcion)) {
-            return false;
-        }
-        return $this->model->create($titulo, $descripcion);
-    }
-
-    public function eliminar($id) {
-        return $this->model->delete($id);
-    }
-
-    public function cambiarEstado($id, $estado) {
-        return $this->model->updateEstado($id, $estado);
-    }
+    header("Location: ../views/dashboard_operativo.php");
+    exit;
 }
-?>
+
+/* CAMBIAR ESTADO */
+if(isset($_GET['estado'])){
+
+    $model->updateEstado($_GET['id'], $_GET['estado']);
+
+    header("Location: ../views/dashboard_operativo.php");
+    exit;
+}
+
+/* ELIMINAR */
+if(isset($_GET['delete'])){
+
+    $model->delete($_GET['delete']);
+
+    header("Location: ../views/dashboard_operativo.php");
+    exit;
+}

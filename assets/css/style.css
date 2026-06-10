@@ -1,0 +1,162 @@
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial;
+    background:#0f172a;
+    color:#e5e7eb;
+    overflow-x:hidden;
+}
+
+/* SIDEBAR */
+.sidebar{
+    width:240px;
+    height:100vh;
+    position:fixed;
+    left:0;
+    top:0;
+    background:#111827;
+    padding:20px;
+    overflow-y:auto;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:bold;
+    margin-bottom:20px;
+    color:#38bdf8;
+}
+
+.menu a{
+    display:block;
+    padding:10px;
+    color:#e5e7eb;
+    text-decoration:none;
+    margin-bottom:8px;
+    border-radius:8px;
+}
+
+.menu a:hover{
+    background:#1f2937;
+}
+
+/* MAIN */
+.main{
+    margin-left:240px;
+    padding:25px;
+    width:calc(100% - 240px);
+    min-height:100vh;
+}
+
+/* HEADER */
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.header h1{
+    font-size:26px;
+}
+
+.btn{
+    background:#38bdf8;
+    color:#0f172a;
+    padding:10px 15px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+/* STATS */
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+    margin:20px 0;
+}
+
+.stat{
+    background:#111827;
+    padding:20px;
+    border-radius:12px;
+    border:1px solid #1f2937;
+}
+
+.stat h2{
+    font-size:30px;
+    color:#38bdf8;
+    margin:0;
+}
+
+/* CARDS */
+.card{
+    background:#111827;
+    padding:18px;
+    border-radius:12px;
+    margin-bottom:15px;
+    border:1px solid #1f2937;
+    transition:0.2s;
+}
+
+.card:hover{
+    transform:translateY(-3px);
+    border-color:#38bdf8;
+}
+
+.card h2{
+    margin:0 0 10px 0;
+    color:#38bdf8;
+}
+
+/* STATUS */
+.status{
+    display:inline-block;
+    padding:5px 10px;
+    border-radius:20px;
+    margin-top:10px;
+    font-size:13px;
+}
+
+.pendiente{background:#92400e;}
+.proceso{background:#0369a1;}
+.finalizado{background:#15803d;}
+
+/* ACTIONS */
+.actions{
+    margin-top:15px;
+}
+
+.actions a{
+    display:inline-block;
+    margin-right:10px;
+    padding:6px 10px;
+    border:1px solid #38bdf8;
+    border-radius:8px;
+    color:#38bdf8;
+    text-decoration:none;
+    transition:0.2s;
+}
+
+.actions a:hover{
+    background:#38bdf8;
+    color:#0f172a;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px){
+
+    .sidebar{
+        position:relative;
+        width:100%;
+        height:auto;
+    }
+
+    .main{
+        margin-left:0;
+        width:100%;
+    }
+}
