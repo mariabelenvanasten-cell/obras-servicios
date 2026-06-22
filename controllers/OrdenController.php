@@ -1,33 +1,111 @@
 <?php
 
-require_once __DIR__ . "/../config/db.php";
-require_once __DIR__ . "/../models/Orden.php";
+session_start();
+
+if (!isset($_SESSION['rol'])) {
+    header("Location: ../views/login.php");
+    exit;
+}
+
+require_once "../config/db.php";
+require_once "../models/Orden.php";
 
 $model = new Orden($pdo);
 
-/* CREAR ORDEN */
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editar'])) {
 
-    $model->create($_POST);
+    $id = $_POST['id'];
+    $actual = $model->getById($id);
 
-    header("Location: ../views/dashboard_operativo.php");
-    exit;
-}
+    if (!$actual) {
+        die("Orden no encontrada");
+    }
 
-/* CAMBIAR ESTADO */
-if(isset($_GET['estado'])){
+    $rol = $_SESSION['rol'];
 
-    $model->updateEstado($_GET['id'], $_GET['estado']);
+    // =========================
+    // TECNICO
+    // =========================
+    if ($rol === 'tecnico') {
 
-    header("Location: ../views/dashboard_operativo.php");
-    exit;
-}
+        $data = [
+            'id' => $id,
+            'materiales' => $_POST['materiales'] ?? '',
+            'estado' => in_array(
+                $_POST['estado'] ?? '',
+                ['Pendiente', 'En proceso', 'Terminada']
+            ) ? $_POST['estado'] : $actual['estado']
+        ];
+    }
 
-/* ELIMINAR */
-if(isset($_GET['delete'])){
+    // =========================
+    // ADMIN
+    // =========================
+    elseif ($rol === 'administrador') {
 
-    $model->delete($_GET['delete']);
+        $data = [
+            'id' => $id,
+            'descripcion' => $_POST['descripcion'] ?? '',
+            'empresa' => $_POST['empresa'] ?? '',
+            'empresa_id' => $_POST['empresa_id'] ?? '',
+            'cliente' => $_POST['cliente'] ?? '',
+            'tecnico_id' => $_POST['tecnico_id'] ?? null,
+            'area' => $_POST['area'] ?? '',
+            'ciudad' => $_POST['ciudad'] ?? '',
+            'materiales' => $_POST['materiales'] ?? '',
+            'costo' => $_POST['costo'] ?? 0,
+            'estado' => $_POST['estado'] ?? $actual['estado']
+        ];
+    }
 
-    header("Location: ../views/dashboard_operativo.php");
+    // =========================
+    // CLIENTE
+    // =========================
+    else {
+
+        $data = [
+            'id' => $id,
+            'estado' => $actual['estado']
+        ];
+
+        if (!empty(trim($_POST['comentario_cliente'] ?? ''))) {
+            $model->addAvance(
+                $id,
+                "CLIENTE",
+                trim($_POST['comentario_cliente'])
+            );
+        }
+    }
+
+    // =========================
+    // UPDATE (SIN ERRORES)
+    // =========================
+    $model->update($data);
+
+    // =========================
+    // AVANCES
+    // =========================
+    if (
+        in_array($rol, ['administrador', 'tecnico']) &&
+        !empty(trim($_POST['avance'] ?? ''))
+    ) {
+        $model->addAvance(
+            $id,
+            $_SESSION['usuario'] ?? $rol,
+            trim($_POST['avance'])
+        );
+    }
+
+    // =========================
+    // REDIRECCIÓN SEGURA
+    // =========================
+
+    $map = [
+        'administrador' => 'dashboard_admin.php',
+        'tecnico' => 'dashboard_tecnico.php',
+        'cliente' => 'dashboard_cliente.php'
+    ];
+
+    header("Location: ../views/" . ($map[$rol] ?? 'login.php'));
     exit;
 }

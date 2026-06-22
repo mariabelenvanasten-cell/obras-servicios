@@ -1,371 +1,183 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 session_start();
 
-if(!isset($_SESSION['rol'])){
-
+if (!isset($_SESSION['rol'])) {
     header("Location: login.php");
     exit;
 }
 
-if($_SESSION['rol'] != "administrador"){
-
+if ($_SESSION['rol'] != "administrador") {
     header("Location: login.php");
     exit;
 }
-?>
-
-session_start();
 
 require_once "../config/db.php";
 require_once "../models/Orden.php";
 
 $model = new Orden($pdo);
-
 $ordenes = $model->getAll();
 
 $total = count($ordenes);
 
-$finalizadas = 0;
+$cerradas = 0;
 $pendientes = 0;
 
-foreach($ordenes as $o){
+foreach ($ordenes as $o) {
 
-    if($o['estado'] == "Finalizado"){
-        $finalizadas++;
-    } else {
+    if (
+        $o['estado'] == "Terminada" ||
+        $o['estado'] == "Facturada" ||
+        $o['estado'] == "Pagada" ||
+        $o['estado'] == "Cerrada"
+    ) {
+        $cerradas++;
+    }
+
+    if ($o['estado'] == "Pendiente") {
         $pendientes++;
     }
 }
-
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGOS - Panel Administrador</title>
 
-<title>Dashboard</title>
-
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial;
-}
-
-body{
-
-    background:#1f1f1f;
-
-    color:white;
-
-    display:flex;
-}
-
-.sidebar{
-
-    width:250px;
-
-    background:#2b2b2b;
-
-    height:100vh;
-
-    padding:20px;
-}
-
-.sidebar h2{
-
-    color:#f5c542;
-
-    margin-bottom:30px;
-}
-
-.sidebar a{
-
-    display:block;
-
-    color:white;
-
-    text-decoration:none;
-
-    padding:12px;
-
-    border-radius:10px;
-
-    margin-bottom:10px;
-
-    transition:0.3s;
-}
-
-.sidebar a:hover{
-
-    background:#444;
-
-    transform:translateX(5px);
-
-    color:#f5c542;
-}
-
-.content{
-
-    flex:1;
-
-    padding:30px;
-}
-
-.top{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    margin-bottom:30px;
-}
-
-.btn{
-
-    background:#f5c542;
-
-    color:#222;
-
-    padding:12px 18px;
-
-    border-radius:10px;
-
-    text-decoration:none;
-
-    font-weight:bold;
-}
-
-.stats{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-
-    gap:20px;
-
-    margin-bottom:30px;
-}
-
-.stat{
-
-    background:#2e2e2e;
-
-    padding:25px;
-
-    border-radius:15px;
-
-    border-left:5px solid #f5c542;
-}
-
-.stat h3{
-
-    color:#bbb;
-
-    margin-bottom:10px;
-}
-
-.stat h1{
-
-    font-size:38px;
-
-    color:#f5c542;
-}
-
-.cards{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-
-    gap:20px;
-}
-
-.card{
-
-    background:#2e2e2e;
-
-    padding:20px;
-
-    border-radius:15px;
-
-    transition:0.3s;
-
-    border-left:5px solid #f5c542;
-}
-
-.card:hover{
-
-    transform:translateY(-5px);
-
-    box-shadow:0 0 15px rgba(0,0,0,0.5);
-}
-
-.status{
-
-    margin-top:15px;
-
-    display:inline-block;
-
-    padding:8px 12px;
-
-    border-radius:8px;
-}
-
-.pendiente{
-
-    background:#664d03;
-}
-
-.finalizado{
-
-    background:#0b7a28;
-}
-
-</style>
-
+<link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
 <body>
 
-<div class="sidebar">
+<div class="layout">
 
-<h2>SGOS</h2>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h2>SGOS</h2>
 
-<a href="dashboard_admin.php">
-🏠 Dashboard
-</a>
+        <a href="dashboard_admin.php">Dashboard</a>
+        <a href="crear.php">Nueva Orden</a>
+        <a href="reportes.php">Reportes</a>
+        <a href="logout.php">Cerrar Sesión</a>
+    </div>
 
-<a href="crear.php">
-📝 Nueva Orden
-</a>
+    <!-- CONTENT -->
+    <div class="content">
 
-<a href="reportes.php">
-📊 Reportes
-</a>
+        <!-- BIENVENIDA -->
+        <h2>Bienvenido Administrador: <?= $_SESSION['usuario'] ?></h2>
 
-<a href="materiales.php">
-📦 Materiales
-</a>
+        <h1>Panel de Administración</h1>
 
-<a href="facturacion.php">
-💲 Facturación
-</a>
+        <div class="stats">
 
-<a href="logout.php">
-🚪 Salir
-</a>
+            <div class="stat">
+                <h3>Órdenes Totales</h3>
+                <h1><?= $total ?></h1>
+            </div>
 
-</div>
+            <div class="stat">
+                <h3>Pendientes</h3>
+                <h1><?= $pendientes ?></h1>
+            </div>
 
-<div class="content">
+            <div class="stat">
+                <h3>Finalizadas</h3>
+                <h1><?= $cerradas ?></h1>
+            </div>
 
-<div class="top">
+        </div>
 
-<h1>
-Bienvenido Administrador
-</h1>
+        <p style="margin-bottom:20px;">
+            <a href="crear.php" class="btn">
+                Nueva Orden
+            </a>
+        </p>
 
-<a class="btn" href="crear.php">
-+ Nueva Orden
-</a>
+        <table>
 
-</div>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Empresa</th>
+                    <th>Cliente</th>
+                    <th>Técnico</th>
+                    <th>Estado</th>
+                    <th>Área</th>
+                    <th>Ciudad</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
 
-<div class="stats">
+            <tbody>
 
-<div class="stat">
+            <?php foreach($ordenes as $o): ?>
 
-<h3>Órdenes Totales</h3>
+                <?php
+                $estado = $o['estado'];
+                $clase = "pendiente";
 
-<h1><?= $total ?></h1>
+                if ($estado == "Asignada" || $estado == "En proceso") {
+                    $clase = "proceso";
+                }
 
-</div>
+                if (
+                    $estado == "Terminada" ||
+                    $estado == "Facturada" ||
+                    $estado == "Pagada" ||
+                    $estado == "Cerrada"
+                ) {
+                    $clase = "finalizado";
+                }
+                ?>
 
-<div class="stat">
+                <tr>
+                    <td><?= $o['id'] ?></td>
+                    <td><?= htmlspecialchars($o['empresa'] ?? '-') ?></td>
+                    <td><?= htmlspecialchars($o['cliente'] ?? '-') ?></td>
+                    <td>
+                        <?= !empty($o['tecnico'])
+                            ? htmlspecialchars($o['tecnico'])
+                            : 'Sin asignar'; ?>
+                    </td>
 
-<h3>Finalizadas</h3>
+                    <td>
+                        <span class="estado <?= $clase ?>">
+                            <?= htmlspecialchars($estado) ?>
+                        </span>
+                    </td>
 
-<h1><?= $finalizadas ?></h1>
+                    <td><?= htmlspecialchars($o['area'] ?? '-') ?></td>
+                    <td><?= htmlspecialchars($o['ciudad'] ?? '-') ?></td>
+                    <td><?= htmlspecialchars($o['fecha'] ?? '-') ?></td>
 
-</div>
+                    <td>
+                        <a class="btn btn-warning" href="editar.php?id=<?= $o['id'] ?>">
+                            Editar
+                        </a>
 
-<div class="stat">
+                        <a class="btn btn-danger"
+                           href="../controllers/OrdenController.php?delete=<?= $o['id'] ?>"
+                           onclick="return confirm('¿Eliminar esta orden?')">
+                            Eliminar
+                        </a>
+                    </td>
+                </tr>
 
-<h3>Pendientes</h3>
+            <?php endforeach; ?>
 
-<h1><?= $pendientes ?></h1>
+            </tbody>
+        </table>
 
-</div>
-
-</div>
-
-<div class="cards">
-
-<?php foreach($ordenes as $o): ?>
-
-<?php
-
-$clase = "pendiente";
-
-if($o['estado'] == "Finalizado"){
-    $clase = "finalizado";
-}
-
-?>
-
-<div class="card">
-
-<h2>
-🏢 <?= $o['empresa'] ?>
-</h2>
-
-<br>
-
-<p>
-<?= $o['descripcion'] ?>
-</p>
-
-<br>
-
-<p>
-📍 Área:
-<?= $o['area'] ?>
-</p>
-
-<p>
-🌎 Ciudad:
-<?= $o['ciudad'] ?>
-</p>
-
-<div class="status <?= $clase ?>">
-
-<?= $o['estado'] ?>
-
-</div>
-
-<br><br>
-
-<a class="btn"
-href="../controllers/OrdenController.php?id=<?= $o['id'] ?>&estado=Finalizado">
-
-Finalizar
-
-</a>
-
-</div>
-
-<?php endforeach; ?>
-
-</div>
+    </div>
 
 </div>
 

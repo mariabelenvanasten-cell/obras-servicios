@@ -1,162 +1,260 @@
+/* =====================
+   RESET
+===================== */
+
 *{
+    margin:0;
+    padding:0;
     box-sizing:border-box;
 }
 
 body{
-    margin:0;
-    font-family:Arial;
-    background:#0f172a;
-    color:#e5e7eb;
-    overflow-x:hidden;
-}
-
-/* SIDEBAR */
-.sidebar{
-    width:240px;
-    height:100vh;
-    position:fixed;
-    left:0;
-    top:0;
+    font-family:Arial, sans-serif;
     background:#111827;
-    padding:20px;
-    overflow-y:auto;
+    color:white;
 }
 
-.logo{
-    font-size:22px;
-    font-weight:bold;
-    margin-bottom:20px;
-    color:#38bdf8;
-}
+/* =====================
+   LAYOUT
+===================== */
 
-.menu a{
-    display:block;
-    padding:10px;
-    color:#e5e7eb;
-    text-decoration:none;
-    margin-bottom:8px;
-    border-radius:8px;
-}
-
-.menu a:hover{
-    background:#1f2937;
-}
-
-/* MAIN */
-.main{
-    margin-left:240px;
-    padding:25px;
-    width:calc(100% - 240px);
+.layout{
+    display:flex;
     min-height:100vh;
 }
 
-/* HEADER */
-.header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
-}
+/* =====================
+   SIDEBAR
+===================== */
 
-.header h1{
-    font-size:26px;
-}
-
-.btn{
-    background:#38bdf8;
-    color:#0f172a;
-    padding:10px 15px;
-    border-radius:10px;
-    text-decoration:none;
-    font-weight:bold;
-}
-
-/* STATS */
-.stats{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:15px;
-    margin:20px 0;
-}
-
-.stat{
-    background:#111827;
+.sidebar{
+    width:250px;
+    background:#1f2937;
     padding:20px;
-    border-radius:12px;
-    border:1px solid #1f2937;
 }
 
-.stat h2{
-    font-size:30px;
-    color:#38bdf8;
-    margin:0;
+.sidebar h2{
+    color:#f5c542;
+    margin-bottom:30px;
 }
 
-/* CARDS */
+.sidebar a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:12px;
+    margin-bottom:8px;
+    border-radius:8px;
+    transition:.3s;
+}
+
+.sidebar a:hover{
+    background:#374151;
+}
+
+/* =====================
+   CONTENT
+===================== */
+
+.content{
+    flex:1;
+    padding:30px;
+    max-width:1200px;
+}
+
+.content h1{
+    color:#f5c542;
+    margin-bottom:10px;
+}
+
+/* =====================
+   CARDS
+===================== */
+
 .card{
-    background:#111827;
-    padding:18px;
+    background:#1f2937;
     border-radius:12px;
+    padding:20px;
     margin-bottom:15px;
-    border:1px solid #1f2937;
-    transition:0.2s;
-}
-
-.card:hover{
-    transform:translateY(-3px);
-    border-color:#38bdf8;
+    box-shadow:0 4px 15px rgba(0,0,0,.25);
 }
 
 .card h2{
-    margin:0 0 10px 0;
-    color:#38bdf8;
+    margin-bottom:15px;
+    color:#f5c542;
 }
 
-/* STATUS */
-.status{
+/* =====================
+   TABLES
+===================== */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:#1f2937;
+    border-radius:12px;
+    overflow:hidden;
+}
+
+table th{
+    background:#374151;
+    color:white;
+    padding:12px;
+    text-align:left;
+}
+
+table td{
+    padding:12px;
+    border-bottom:1px solid #374151;
+}
+
+/* =====================
+   BUTTONS BASE (ARREGLADO)
+===================== */
+
+.btn{
     display:inline-block;
-    padding:5px 10px;
-    border-radius:20px;
-    margin-top:10px;
-    font-size:13px;
-}
-
-.pendiente{background:#92400e;}
-.proceso{background:#0369a1;}
-.finalizado{background:#15803d;}
-
-/* ACTIONS */
-.actions{
-    margin-top:15px;
-}
-
-.actions a{
-    display:inline-block;
-    margin-right:10px;
-    padding:6px 10px;
-    border:1px solid #38bdf8;
+    padding:10px 14px;
     border-radius:8px;
-    color:#38bdf8;
     text-decoration:none;
-    transition:0.2s;
+    font-weight:bold;
+    border:none;
+    cursor:pointer;
 }
 
-.actions a:hover{
-    background:#38bdf8;
-    color:#0f172a;
+/* =====================
+   BOTÓN GUARDAR
+===================== */
+
+.btn-guardar{
+    background:#2563eb;
+    color:#fff;
+    transition:0.2s ease;
 }
 
-/* RESPONSIVE */
-@media (max-width: 768px){
+.btn-guardar:hover{
+    background:#1d4ed8;
+    transform:translateY(-1px);
+}
 
-    .sidebar{
-        position:relative;
-        width:100%;
-        height:auto;
+.btn-guardar:active{
+    transform:scale(0.98);
+}
+
+/* IMPORTANTE: evita conflicto con button global */
+button.btn-guardar{
+    width:auto !important;
+}
+
+/* =====================
+   OTROS BOTONES
+===================== */
+
+.btn-warning{
+    background:#f5c542;
+    color:#111827;
+}
+
+.btn-danger{
+    background:#ef4444;
+    color:white;
+}
+
+/* =====================
+   ESTADOS
+===================== */
+
+.estado{
+    padding:6px 10px;
+    border-radius:8px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.pendiente{
+    background:#fef3c7;
+    color:black;
+}
+
+.proceso{
+    background:#93c5fd;
+    color:black;
+}
+
+.finalizado{
+    background:#86efac;
+    color:black;
+}
+
+/* =====================
+   FORMULARIOS
+===================== */
+
+input,
+textarea,
+select{
+    width:100%;
+    padding:12px;
+    margin-top:6px;
+    margin-bottom:15px;
+    border:none;
+    border-radius:10px;
+    background:#111827;
+    color:white;
+    outline:none;
+    border:1px solid #374151;
+}
+
+textarea{
+    min-height:120px;
+    resize:vertical;
+}
+
+label{
+    display:block;
+    margin-top:10px;
+    margin-bottom:6px;
+    font-weight:bold;
+    color:#d1d5db;
+}
+
+/* =====================
+   UTILIDADES
+===================== */
+
+strong{
+    color:#f5c542;
+}
+
+/* =====================
+   HISTORIAL
+===================== */
+
+.historial-item{
+    padding:12px 0;
+    border-bottom:1px solid #374151;
+}
+
+.historial-fecha{
+    color:#9ca3af;
+    font-size:12px;
+}
+
+/* =====================
+   RESPONSIVE
+===================== */
+
+@media(max-width:768px){
+
+    .layout{
+        flex-direction:column;
     }
 
-    .main{
-        margin-left:0;
+    .sidebar{
         width:100%;
+    }
+
+    .content{
+        padding:15px;
     }
 }

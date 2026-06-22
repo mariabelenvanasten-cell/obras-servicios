@@ -1,70 +1,54 @@
+<?php
+
+session_start();
+
+require_once "../config/db.php";
+require_once "../models/Material.php";
+
+$model = new Material($pdo);
+$materiales = $model->getAll();
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
 
 <meta charset="UTF-8">
-
 <title>Materiales</title>
 
 <style>
 
 body{
-
     background:#1f1f1f;
-
     color:white;
-
     font-family:Arial;
-
     padding:30px;
 }
 
 h1{
-
     color:#f5c542;
-
     margin-bottom:30px;
 }
 
-.grid{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-
-    gap:20px;
-}
-
-.card{
-
+.table{
     background:#2e2e2e;
-
-    padding:20px;
-
     border-radius:15px;
-
-    border-left:5px solid #f5c542;
-
-    transition:0.3s;
+    overflow:hidden;
 }
 
-.card:hover{
-
-    transform:translateY(-5px);
+.row{
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr 2fr;
+    padding:18px;
+    border-bottom:1px solid #444;
 }
 
-.stock{
-
-    margin-top:15px;
-
-    background:#0b7a28;
-
-    display:inline-block;
-
-    padding:8px 12px;
-
-    border-radius:8px;
+.head{
+    background:#f5c542;
+    color:#222;
+    font-weight:bold;
 }
 
 </style>
@@ -73,39 +57,29 @@ h1{
 
 <body>
 
-<h1>📦 Materiales</h1>
+<h1>📦 Gestión de Materiales</h1>
 
-<div class="grid">
+<div class="table">
 
-<div class="card">
-
-<h2>Cables</h2>
-
-<div class="stock">
-Stock Disponible
+<div class="row head">
+<div>Material</div>
+<div>Cantidad</div>
+<div>Stock</div>
+<div>Proveedor</div>
 </div>
 
-</div>
+<?php foreach($materiales as $m): ?>
 
-<div class="card">
+<div class="row">
 
-<h2>Interruptores</h2>
-
-<div class="stock">
-Stock Disponible
-</div>
-
-</div>
-
-<div class="card">
-
-<h2>Fusibles</h2>
-
-<div class="stock">
-Stock Disponible
-</div>
+<div><?= htmlspecialchars($m['nombre']) ?></div>
+<div><?= htmlspecialchars($m['cantidad']) ?></div>
+<div><?= htmlspecialchars($m['stock']) ?></div>
+<div><?= htmlspecialchars($m['proveedor']) ?></div>
 
 </div>
+
+<?php endforeach; ?>
 
 </div>
 
