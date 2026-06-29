@@ -1,0 +1,13 @@
+# SGOS - Configuración Apache
+
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+</IfModule>
+
+ServerSignature Off
+
+<FilesMatch "\.(sql|bak|ini|log)$">
+    Require all denied
+</FilesMatch>
